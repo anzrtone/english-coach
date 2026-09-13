@@ -6,7 +6,6 @@ import {
   toUIMessageStream,
 } from 'ai';
 
-export const runtime = 'edge';
 export const maxDuration = 30;
 
 const SYSTEM_PROMPT = `You are "Lingo", a warm, patient, and highly practical English language coach. You help immigrant working professionals in the Middle East improve their English for real workplace situations.
