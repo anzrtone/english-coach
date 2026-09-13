@@ -5,6 +5,8 @@ import {
   createUIMessageStreamResponse,
   toUIMessageStream,
 } from 'ai';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { createOpenAI } from '@ai-sdk/openai';
 
 export const maxDuration = 30;
 
@@ -26,8 +28,34 @@ You have expertise in common workplace English challenges for Arabic, Urdu, Hind
 export async function POST(req: Request) {
   const { messages }: { messages: UIMessage[] } = await req.json();
 
+  const geminiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY || process.env.GEMINI_API_KEY;
+  const gatewayKey = process.env.AI_GATEWAY_API_KEY;
+  const openaiKey = process.env.OPENAI_API_KEY;
+
+  let model;
+
+  if (geminiKey) {
+    const google = createGoogleGenerativeAI({
+      apiKey: geminiKey,
+    });
+    model = google('gemini-3.6-flash');
+  } else if (gatewayKey || openaiKey) {
+    const apiKey = gatewayKey || openaiKey;
+    const isGateway = apiKey?.startsWith('vck_') || !!gatewayKey;
+    const openai = createOpenAI({
+      apiKey: apiKey,
+      ...(isGateway ? { baseURL: 'https://ai-gateway.vercel.sh/v1' } : {}),
+    });
+    model = openai(isGateway ? 'openai/gpt-4o-mini' : 'gpt-4o-mini');
+  } else {
+    return new Response(
+      JSON.stringify({ error: 'Missing API key. Please set GOOGLE_GENERATIVE_AI_API_KEY (or GEMINI_API_KEY) in your .env.local file.' }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
   const result = streamText({
-    model: 'openai/gpt-4o-mini',
+    model,
     instructions: SYSTEM_PROMPT,
     messages: await convertToModelMessages(messages),
   });
@@ -36,3 +64,5 @@ export async function POST(req: Request) {
     stream: toUIMessageStream({ stream: result.stream }),
   });
 }
+
+
