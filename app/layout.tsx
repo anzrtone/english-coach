@@ -9,23 +9,23 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: 'Lingo — Free English Coach for Professionals',
+  title: 'Lingo — Free English Coach for Caregivers & Hospitality Workers',
   description:
-    'Practice your workplace English for free with Lingo, your AI-powered English coach. Built for immigrant professionals in the Middle East.',
+    'Practice practical daily English for free with Lingo, your AI English coach. Built for immigrant caregivers, babysitters, elder aides, and hospitality workers.',
   keywords: [
     'English learning',
     'English coach',
-    'workplace English',
-    'Gulf region',
-    'Middle East',
-    'professional English',
+    'caregiver English',
+    'babysitter English',
+    'hospitality English',
+    'immigrant workers',
     'ESL',
     'language learning',
   ],
   openGraph: {
-    title: 'Lingo — Free English Coach for Professionals',
+    title: 'Lingo — Free English Coach for Caregivers',
     description:
-      'Practice your workplace English for free with an AI-powered English coach designed for immigrant professionals in the Middle East.',
+      'Practice practical daily English for free with an AI-powered coach designed for immigrant caregivers, babysitters, and hospitality workers.',
     type: 'website',
   },
 };

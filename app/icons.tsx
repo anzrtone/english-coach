@@ -42,3 +42,17 @@ export function PaperAirplaneIcon(props: SVGProps<SVGSVGElement>) {
     </svg>
   );
 }
+
+export function GlobeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      {...props}
+    >
+      <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 6a.75.75 0 0 0-1.5 0v.816a6.763 6.763 0 0 0-3.328 1.488.75.75 0 0 0 .988 1.13 5.263 5.263 0 0 1 2.34-1.118v3.468A6.745 6.745 0 0 0 7.5 15a.75.75 0 0 0 1.5 0 5.245 5.245 0 0 1 2.25-4.216v5.966a.75.75 0 0 0 1.5 0v-.816a6.763 6.763 0 0 0 3.328-1.488.75.75 0 0 0-.988-1.13 5.263 5.263 0 0 1-2.34 1.118v-3.468A6.745 6.745 0 0 0 16.5 9a.75.75 0 0 0-1.5 0 5.245 5.245 0 0 1-2.25 4.216V7.25A.75.75 0 0 0 12.75 6Z" clipRule="evenodd" />
+    </svg>
+  );
+}
+
