@@ -33,8 +33,10 @@ npm install
 
 # 3. Create your local environment file
 cp .env.example .env.local
-# Open .env.local and add your key:
-# GOOGLE_GENERATIVE_AI_API_KEY=AIzaSy...
+# Open .env.local and add one or more keys (comma-separated).
+# When a key hits its rate limit, Lingo automatically switches to the next one:
+# GEMINI_API_KEYS=AIzaSy...,AIzaSy...
+# (Free-tier quota is per Google Cloud project, so use keys from different projects.)
 
 # 4. Start the dev server
 npm run dev
