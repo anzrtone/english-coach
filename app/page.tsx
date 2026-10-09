@@ -32,13 +32,6 @@ const ENGLISH_SPEECH = 'en-US';
 
 const LANGUAGES: LanguageOption[] = [
   { code: 'bn', name: 'Bengali', native: 'বাংলা', flag: '🇧🇩', speech: 'bn-BD' },
-  { code: 'hi', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳', speech: 'hi-IN' },
-  { code: 'tl', name: 'Tagalog', native: 'Tagalog', flag: '🇵🇭', speech: 'fil-PH' },
-  { code: 'ur', name: 'Urdu', native: 'اردو', flag: '🇵🇰', speech: 'ur-PK' },
-  { code: 'ar', name: 'Arabic', native: 'العربية', flag: '🇸🇦', speech: 'ar-AE' },
-  { code: 'es', name: 'Spanish', native: 'Español', flag: '🇪🇸', speech: 'es-ES' },
-  { code: 'id', name: 'Indonesian', native: 'Bahasa', flag: '🇮🇩', speech: 'id-ID' },
-  { code: 'vi', name: 'Vietnamese', native: 'Tiếng Việt', flag: '🇻🇳', speech: 'vi-VN' },
 ];
 
 // Pre-generated (scripts/generate-presets.mjs): replies to the starter
@@ -121,6 +114,8 @@ export default function ChatPage() {
   const [userLang, setUserLang] = useState<LanguageOption>(LANGUAGES[0]); // Default Bengali
   const [showLangModal, setShowLangModal] = useState(false);
   const [translations, setTranslations] = useState<TranslationState>({});
+  // Suggestion chip labels per language, shown inside the welcome translation.
+  const [chipTranslations, setChipTranslations] = useState<Partial<Record<string, string[]>>>({});
   // IDs of AI replies that ended before the model finished (limit, filter, dropped connection).
   const [cutOffIds, setCutOffIds] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -246,6 +241,20 @@ export default function ChatPage() {
       ]);
       setPresetTyping(false);
     }, PRESET_TYPING_MS);
+  };
+
+  const loadChipTranslations = async () => {
+    const lang = userLang.code;
+    if (chipTranslations[lang]) return;
+    // Pre-generated prompt translations first; otherwise translate, keeping English on failure.
+    const labels = await Promise.all(
+      CAREGIVER_SUGGESTIONS.map(
+        (chip) =>
+          PRESET_REPLIES.get(chip.text)?.translations[lang]?.prompt ??
+          translateMarkdown(chip.text, 'en', lang).catch(() => chip.text),
+      ),
+    );
+    setChipTranslations((prev) => ({ ...prev, [lang]: labels }));
   };
 
   const handleTranslate = async (messageId: string, rawText: string, preset?: PresetTranslations) => {
@@ -423,7 +432,10 @@ export default function ChatPage() {
                   />
                 )}
                 <button
-                  onClick={() => handleTranslate('welcome', WELCOME_MESSAGE, WELCOME_TRANSLATIONS)}
+                  onClick={() => {
+                    handleTranslate('welcome', WELCOME_MESSAGE, WELCOME_TRANSLATIONS);
+                    loadChipTranslations();
+                  }}
                   className="translate-btn"
                 >
                   <GlobeIcon className="w-3.5 h-3.5" />
@@ -445,6 +457,23 @@ export default function ChatPage() {
                     <span className="text-violet-300">Translating…</span>
                   ) : (
                     <TranslatedText lang={userLang.code} text={translations[tKey('welcome')].text} error={translations[tKey('welcome')].error} />
+                  )}
+                  {/* Translated suggestion chips: same action, the English prompt is sent */}
+                  {chipTranslations[userLang.code] && (
+                    <div className="suggestion-grid translated-suggestions" lang={userLang.code}>
+                      {CAREGIVER_SUGGESTIONS.map((chip, idx) => (
+                        <button
+                          key={idx}
+                          onClick={() => handleSuggestionClick(chip.text)}
+                          disabled={isStreaming}
+                          title={chip.text}
+                          className="suggestion-chip"
+                        >
+                          <span>{chip.icon}</span>
+                          <span>{chipTranslations[userLang.code]![idx]}</span>
+                        </button>
+                      ))}
+                    </div>
                   )}
                   {translations[tKey('welcome')].text && speech.canSpeak(userLang.speech) && (
                     <div className="translate-bar">

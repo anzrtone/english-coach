@@ -648,6 +648,14 @@ body::before {
   color: #f5f3ff;
 }
 
+.translated-suggestions {
+  margin-top: 10px;
+}
+
+.translated-suggestions .suggestion-chip {
+  line-height: 1.7;
+}
+
 .translated-header {
   display: flex;
   align-items: center;
