@@ -440,19 +440,21 @@ export default function ChatPage() {
                 <div className="translated-box">
                   <div className="translated-header">
                     <span>{userLang.flag} {userLang.name} Translation</span>
-                    {translations[tKey('welcome')].text && speech.canSpeak(userLang.speech) && (
+                  </div>
+                  {translations[tKey('welcome')].loading ? (
+                    <span className="text-violet-300">Translating…</span>
+                  ) : (
+                    <TranslatedText lang={userLang.code} text={translations[tKey('welcome')].text} error={translations[tKey('welcome')].error} />
+                  )}
+                  {translations[tKey('welcome')].text && speech.canSpeak(userLang.speech) && (
+                    <div className="translate-bar">
                       <SpeakButton
                         speaking={speech.speakingId === 'welcome:tr'}
                         loading={speech.loadingId === 'welcome:tr'}
                         notice={speech.notice?.id === 'welcome:tr' ? speech.notice.text : undefined}
                         onClick={() => handleSpeak('welcome:tr', translations[tKey('welcome')].text!, userLang.speech)}
                       />
-                    )}
-                  </div>
-                  {translations[tKey('welcome')].loading ? (
-                    <span className="text-violet-300">Translating…</span>
-                  ) : (
-                    <TranslatedText lang={userLang.code} text={translations[tKey('welcome')].text} error={translations[tKey('welcome')].error} />
+                    </div>
                   )}
                 </div>
               )}
@@ -524,19 +526,21 @@ export default function ChatPage() {
                     <div className="translated-box">
                       <div className="translated-header">
                         <span>{userLang.flag} {userLang.name} Translation</span>
-                        {tState.text && speech.canSpeak(userLang.speech) && (
+                      </div>
+                      {tState.loading ? (
+                        <span className="text-violet-300">Translating…</span>
+                      ) : (
+                        <TranslatedText lang={userLang.code} text={tState.text} error={tState.error} />
+                      )}
+                      {tState.text && speech.canSpeak(userLang.speech) && (
+                        <div className="translate-bar">
                           <SpeakButton
                             speaking={speech.speakingId === `${message.id}:tr`}
                             loading={speech.loadingId === `${message.id}:tr`}
                             notice={speech.notice?.id === `${message.id}:tr` ? speech.notice.text : undefined}
                             onClick={() => handleSpeak(`${message.id}:tr`, tState.text!, userLang.speech)}
                           />
-                        )}
-                      </div>
-                      {tState.loading ? (
-                        <span className="text-violet-300">Translating…</span>
-                      ) : (
-                        <TranslatedText lang={userLang.code} text={tState.text} error={tState.error} />
+                        </div>
                       )}
                     </div>
                   )}

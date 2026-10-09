@@ -24,8 +24,9 @@ function loadKeys(): string[] {
     process.env.GOOGLE_GENERATIVE_AI_API_KEY ?? '',
     process.env.GEMINI_API_KEY ?? '',
   ];
-  // Tolerate `"key1", "key2"` style lists: strip whitespace, quotes and stray commas.
-  const cleaned = raw.flatMap((k) => k.split(',')).map((k) => k.trim().replace(/^["']+|["']+$/g, '').trim());
+  // Tolerate `"key1", "key2"` or `"key1" "key2"` style lists: split on commas,
+  // whitespace and quotes.
+  const cleaned = raw.flatMap((k) => k.split(/[\s,"']+/));
   return [...new Set(cleaned.filter(Boolean))];
 }
 
