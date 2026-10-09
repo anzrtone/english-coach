@@ -748,9 +748,20 @@ body::before {
   margin-bottom: 24px;
 }
 
+/* A single language option sits centered, at the width of one column. */
+.language-grid > .language-card:only-child {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: calc(50% - 5px);
+}
+
 @media (max-width: 480px) {
   .language-grid {
     grid-template-columns: 1fr;
+  }
+
+  .language-grid > .language-card:only-child {
+    width: 100%;
   }
 
   /* Make room in the header for the language and voice-speed buttons. */
