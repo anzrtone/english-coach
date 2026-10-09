@@ -32,6 +32,13 @@ const ENGLISH_SPEECH = 'en-US';
 
 const LANGUAGES: LanguageOption[] = [
   { code: 'bn', name: 'Bengali', native: 'বাংলা', flag: '🇧🇩', speech: 'bn-BD' },
+  { code: 'hi', name: 'Hindi', native: 'हिन्दी', flag: '🇮🇳', speech: 'hi-IN' },
+  { code: 'tl', name: 'Tagalog', native: 'Tagalog', flag: '🇵🇭', speech: 'fil-PH' },
+  { code: 'ur', name: 'Urdu', native: 'اردو', flag: '🇵🇰', speech: 'ur-PK' },
+  { code: 'ar', name: 'Arabic', native: 'العربية', flag: '🇸🇦', speech: 'ar-AE' },
+  { code: 'es', name: 'Spanish', native: 'Español', flag: '🇪🇸', speech: 'es-ES' },
+  { code: 'id', name: 'Indonesian', native: 'Bahasa', flag: '🇮🇩', speech: 'id-ID' },
+  { code: 'vi', name: 'Vietnamese', native: 'Tiếng Việt', flag: '🇻🇳', speech: 'vi-VN' },
 ];
 
 // Pre-generated (scripts/generate-presets.mjs): replies to the starter
